@@ -409,11 +409,15 @@ def ups_signup():
 							break
 					if tmp == user_id:
 						user_pwd = request.form.get('user_pwd')
-						if user_pwd != '':
+						for x in list(user_id):
+							if x == ' ':
+								errorCode = 1
+								break
+						if user_pwd != '' and errorCode != 1:
 							conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 							cursor = conn.cursor()
 							temp = "SELECT mPassword FROM member WHERE mId = '" + tmp + "'"
-							print(temp)
+						#	print(temp)
 							cursor.execute(temp)
 							checkPassword = cursor.fetchall()
 							print(checkPassword)
@@ -434,11 +438,14 @@ def ups_signup():
 					return render_template('upsSignup.html', error = error)
 				else:
 					ups_ip = request.form.get('ups_ip')
-					ip = ups_ip.split(":")[0].split('.')
-					port = int(ups_ip.split(":")[1])
+					try:
+						ip = ups_ip.split(":")[0].split('.')
+						port = int(ups_ip.split(":")[1])
+					except:
+						errorCode = 1
 				#	print("IP : " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3])
 				#	print("PORT : " + str(port))
-					if ups_ip != '' and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
+					if ups_ip != '' and errorCode!= 1 and len(ip) == 4 and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
 						print("ups_ip : " + ups_ip)
 						ups_create = request.form.get('ups_create')
 						if (ups_create != 'None'):
@@ -544,11 +551,183 @@ def user_replace():
 
 @app.route('/ups_replace', methods=['GET', 'POST'])
 def ups_replace():
-	if request.method == 'GET':
-		return render_template('upsReplace.html', error = "修改之資料未輸入則保留原設置")
+	print('-------------------------------')
+	print("UPS Replace Client IP : " + request.remote_addr)
+	errorCode = 0
+	if request.method == 'GET':	
+		print('-------------------------------')
+		error = ''
+		return render_template('upsReplace.html', error = error)
 	else:
-		pass
+		print('-------------------------------')
+		print (request.form)
+		ups_id = request.form.get('ups_id')
+		for x in list(ups_id):
+			if x == ' ':
+				errorCode = 1
+				break
+		if ups_id != '' and errorCode == 0 and len(ups_id) <= 10 and len(ups_id) >= 4:
+			print("ups_id : " + ups_id)
+			user_id = request.form.get('user_id')
+			for x in list(user_id):
+				if x == ' ':
+					errorCode = 1
+					break
+			if user_id != '' and errorCode == 0 and len(user_id) <= 10 and len(user_id) >= 4:
+				print("user_id : " + user_id)
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+				cursor = conn.cursor()
+				cursor.execute('SELECT uId FROM ups')
+				upsList = cursor.fetchall()
+				cursor.close()
+				for x in range(0, len(upsList)):
+				#	print(str(upsList[x]))
+					tmp = ''
+					for y in list(str(upsList[x]).split("'")[1]):
+						if y != ' ':
+						#	print('/' + y + '/')
+							tmp = tmp + y
+						else:
+							break
+					if tmp == ups_id:	
+					#	print(tmp)
+						user_id = request.form.get('user_id')
+						for x in list(user_id):
+							if x == ' ':
+								errorCode = 1
+						if user_id != '' and errorCode == 0 and len(user_id) <= 10 and len(user_id) >= 4:
+							print("user_id : " + user_id)
+							conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+							cursor = conn.cursor()
+							cursor.execute("SELECT mId FROM ups WHERE uId = '" + ups_id + "'")
+							memberList = cursor.fetchall()
+							conn.close()
+							tmp = ''
+							for y in list(str(memberList[0]).split("'")[1]):
+								if y != ' ':
+								#	print('/' + y + '/')
+									tmp = tmp + y
+								else:
+									break
+							if tmp == user_id:
+								user_pwd = request.form.get('user_pwd')
+								for x in list(user_id):
+									if x == ' ':
+										errorCode = 1
+										break
+								if user_pwd != '' and errorCode != 1:
+									conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+									cursor = conn.cursor()
+									temp = "SELECT mPassword FROM member WHERE mId = '" + tmp + "'"
+								#	print(temp)
+									cursor.execute(temp)
+									checkPassword = cursor.fetchall()
+									print(checkPassword)
+									cursor.close()
+									checkMember = 0
+									password = ''
+									for z in list(str(checkPassword[0]).split("'")[1]):
+										if z != ' ':
+										#	print('/' + z + '/')
+											password = password + z
+										else:
+											break
+									print(password)
+									if user_pwd == password:
+										checkMember = checkMember + 1
+							#	print(checkMember)
+								if checkMember == 1:
+									ups_ip = request.form.get('ups_ip')
+									if ups_ip != '':
+										try:
+											ip = ups_ip.split(":")[0].split('.')
+											port = int(ups_ip.split(":")[1])
+										except:
+											errorCode = 1
+									#	print("IP : " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3])
+									#	print("PORT : " + str(port))
+										if ups_ip != '' and errorCode != 1 and len(ip) == 4 and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
+											print("ups_ip : " + ups_ip)
+											conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+											cursor = conn.cursor()
+											temp = "UPDATE ups SET uIP = '" + ups_ip + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+											print(temp)
+											cursor.execute(temp)
+											conn.commit()
+											conn.close()
+										else:
+											print('ups_ip Error !')
+											print('-------------------------------')
+											error = '請確認輸入的託管 IP'
+											return render_template('upsSignup.html', error = error)
+									ups_create = request.form.get('ups_create')
+									if ups_create != 'None':
+										print("ups_creat : " + ups_create)
+										conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+										cursor = conn.cursor()
+										temp = "UPDATE ups SET uFactory = '" + ups_create + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+										print(temp)
+										cursor.execute(temp)
+										conn.commit()
+										cursor.close()
+									ups_model = request.form.get('ups_model')
+									if ups_model != 'None':
+										print("ups_model : " + ups_model)
+										ups_unit = request.form.get('ups_unit')
+										conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+										cursor = conn.cursor()
+									#	temp = "UPDATE ups SET uFactory = '" + ups_create + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+										temp = "UPDATE ups SET uModel = '" + ups_model + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+										print(temp)
+										cursor.execute(temp)
+										temp = "UPDATE ups SET uUnit = '" + ups_unit + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+									#	print(temp)
+										cursor.execute(temp)
+										conn.commit()
+										cursor.close()
+									ups_locate = request.form.get('ups_locate')
+									if ups_locate != '':
+										conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+										cursor = conn.cursor()
+										temp = "UPDATE ups SET uDistance = '" + ups_locate + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+									#	print(temp)
+										cursor.execute(temp)
+										conn.commit()
+										cursor.close()
+									ups_collect = request.form.get('ups_collect')
+									if ups_collect != None:
+										ups_collect=0
+									else:
+										ups_collect=1
+										print("ups_collect : " + str(ups_collect))
+									conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+									cursor = conn.cursor()
+									temp = "UPDATE ups SET uCollect = '" + str(ups_collect) + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+								#	print(temp)
+									cursor.execute(temp)
+									conn.commit()
+									cursor.close()
 
+									print('驗證成功')
+									print('-------------------------------')
+									error = '驗證成功'
+									return render_template('upsReplace.html', error = error)
+									
+								else:
+									errorCode = 1
+							else:
+								errorCode = 1
+						else:
+							errorCode = 1
+					if x == len(upsList) - 1:
+						errorCode = 1						
+		if (errorCode == 1):
+			print('ups_id Error !')
+			print('-------------------------------')
+			error = '請確認輸入的設備資料'
+			return render_template('upsReplace.html', error = error)			
+
+				
 
 if __name__ == '__main__':
 #	app.run(debug = True)
