@@ -1,0 +1,31 @@
+<!DOCTYPE html>  
+<html>  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<title>管理員 資料修改</title>
+<style>
+</style>
+</head>
+<body background="../static/images/login_background.jpg">
+<form action="" method="POST" name=all_service>
+    <div align="center">
+      <H1>監控系統管理員資料修改</H1>
+      ------------------------------------------------------------<br>
+      <font color="red"><H3><b>{{ error }}</b></H3></font>
+      <H3>管理者 帳號 : <input type='text' name='user_id' placeholder="請輸入需修改資料之帳號"></H3>
+      <H3>管理者 舊密碼 : <input type='password' name='user_pwd' placeholder="請輸入您上次設置的密碼"></H3>
+      <H3>管理者 新密碼 : <input type='password' name='user_pwd' placeholder="更新密碼請大於8位數需含大寫"></H3>
+      <H3>新密碼 雙驗證: <input type='password' name='user_pwd' placeholder="請再次輸入須更新的密碼"></H3>
+      <H3>姓名更改 : <input type='text' name='user_name'placeholder="英文需以 ' - ' 分開"></H3>
+      <H3>電話更改 : <input type='text' name='user_phone'placeholder="0912-345-678"></H3>
+      <H3>電子信箱更改 : <input type='text' name='user_mail'placeholder="Owner@domain.xxx.xx"></H3>
+      <input type='checkbox' name='user_collect'><b>我願意參與台達電能源資料收集</b></input><br><br>
+      <button type="button" onclick= "self.location.href = '{{url_for('login')}} '"><b>回到 管理者 登入</b></button> 
+      <button type="button" onclick= "self.location.href = '{{url_for('user_signup')}} '"><b>前往 管理者 註冊</b></button> 
+      <button class='btn'><b>管理者 資料更新</b></button><br><br>
+      ------------------------------------------------------------<br>
+      <H4>Copyright © Delta Power Solutions 2018</H4>
+    </div>
+ </form>
+</body>
+</html>

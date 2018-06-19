@@ -25,7 +25,8 @@
 		<H3>密碼 : <input type='password' name='user_pwd'></H3><br>
 		<div align="center">
 			<button type='button'><b>管理者 登錄</b></button>
-			<button type='button'><b>管理者 註冊</b></button><br><br>
+			<button type='button' onclick= "self.location.href = '{{url_for('user_signup')}} '"><b>管理者 註冊</b></button>
+			<button type='button' onclick= "self.location.href = '{{url_for('user_replace')}} '"><b>編輯 管理者 資料</b></button><br><br>
 		</div>
 		-------------------------------------------------------------
 		<br><br><br><br><br>
@@ -37,7 +38,8 @@
 		<H3>擁有者 密碼 : <input type='password' name='ups_id'></H3><br>
 		<div align="center">
 			<button type='button'><b>UPS 編號登錄</b></button>
-			<button type='button'><b>UPS 編號註冊</b></button><br><br>
+			<button type='button' onclick= "self.location.href = '{{url_for('ups_signup')}} '"><b>UPS 編號註冊</b></button>
+			<button type='button' onclick= "self.location.href = '{{url_for('ups_replace')}} '"><b>編輯 UPS 內容</b></button><br><br>
 		</div>
 		-------------------------------------------------------------
 		<br><br><br><br><br>

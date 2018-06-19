@@ -304,7 +304,7 @@ def user_signup():
 								else:
 									user_collect=1
 								print("user_collect : " + str(user_collect))
-								conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="QQ123", database="1410432021")
+								conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 								cursor = conn.cursor()
 								cursor.execute('SELECT mId FROM member')
 								memberList = cursor.fetchall()
@@ -392,7 +392,7 @@ def ups_signup():
 					errorCode = 1
 			if user_id != '' and errorCode == 0 and len(user_id) <= 10 and len(user_id) >= 4:
 				print("user_id : " + user_id)
-				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="QQ123", database="1410432021")
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 				cursor = conn.cursor()
 				cursor.execute('SELECT mId FROM member')
 				memberList = cursor.fetchall()
@@ -408,7 +408,26 @@ def ups_signup():
 						else:
 							break
 					if tmp == user_id:
-						checkMember = checkMember + 1
+						user_pwd = request.form.get('user_pwd')
+						if user_pwd != '':
+							conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+							cursor = conn.cursor()
+							temp = "SELECT mPassword FROM member WHERE mId = '" + tmp + "'"
+							print(temp)
+							cursor.execute(temp)
+							checkPassword = cursor.fetchall()
+							print(checkPassword)
+							cursor.close()
+							password = ''
+							for z in list(str(checkPassword[0]).split("'")[1]):
+								if z != ' ':
+								#	print('/' + z + '/')
+									password = password + z
+								else:
+									break
+							print(password)
+							if user_pwd == password:
+								checkMember = checkMember + 1
 				#	print(tmp)
 				if checkMember != 1:
 					error = '請確認管理者 ID 是否存在'
@@ -442,7 +461,7 @@ def ups_signup():
 											else:
 												ups_collect=1
 											print("ups_collect : " + str(ups_collect))
-											conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="QQ123", database="1410432021")
+											conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 											cursor = conn.cursor()
 											cursor.execute('SELECT uId FROM ups')
 											upsList = cursor.fetchall()
@@ -515,6 +534,21 @@ def ups_signup():
 			print('-------------------------------')
 			error = '請確認輸入的 UPS 編號'
 			return render_template('upsSignup.html', error = error)
+
+@app.route('/user_replace', methods=['GET', 'POST'])
+def user_replace():
+	if request.method == 'GET':
+		return render_template('userReplace.html', error = "修改之資料未輸入則保留原設置")
+	else:
+		pass
+
+@app.route('/ups_replace', methods=['GET', 'POST'])
+def ups_replace():
+	if request.method == 'GET':
+		return render_template('upsReplace.html', error = "修改之資料未輸入則保留原設置")
+	else:
+		pass
+
 
 if __name__ == '__main__':
 #	app.run(debug = True)
