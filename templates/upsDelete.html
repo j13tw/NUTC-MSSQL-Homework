@@ -1,0 +1,30 @@
+<!DOCTYPE html>  
+<html>  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<title>監控系統 UPS 設備註冊</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<style>
+</style>
+</head>
+<body background="../static/images/background.png">
+<form action="" method="POST" name=all_service>
+    <div align="center">
+      <br><H1><b>監控系統UPS設備移除</b></H1>
+      <H2><b>--------------------------------------------------------</b></H2>
+      <font color="red"><H2><b>{{ error }}</b></H2></font>
+      <font color="blue"><H2><b>您的 UPS 編號列表 : {{ msg }}</b></H2></font><br>
+      <H2><b>移除託管 UPS 編號 : <input type='text' name='ups_id' ></b></H2><br>
+      <H2><b>管理者 帳號 : <input type='text' name='user_id' value={{user_id}} disabled></b></H2><br>
+      <H2><b>管理者 密碼 : <input type='password' name='user_pwd'></b></H2><br>
+      <button type="button" class="btn-secondary btn-lg" onclick="location.href='/now/{{user_id}}'"><b>回到 管理頁面</b></a></button>
+      <button class="btn-success btn-lg"><b>移除 UPS 設備託管</b></button>
+      <H2><b>--------------------------------------------------------</b></H2>
+      <H4>Copyright © Delta Power Solutions 2018</H4>
+    </div>
+ </form>
+</body>
+</html>

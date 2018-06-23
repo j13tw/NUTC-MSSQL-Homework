@@ -68,190 +68,313 @@ port = '5000'							#chang to your service Port
 hostHealth = ''
 releaseTime = ''
 
-@app.route('/index')
-def index():
-	global releaseTime
-	global hostname, port, hostHealth
-	global serialName_A, systemMode_A, ups_Life_A
-	global inputLine_A, inputFreq_A, inputVolt_A
-	global outputLine_A, outputFreq_A, outputVolt_A, outputWatt_A, outputAmp_A, outputPercent_A
-	global batteryHealth_A, batteryStatus_A, batteryCharge_Mode_A
-	global batteryRemain_Min_A, batteryRemain_Sec_A, batteryVolt_A, batteryTemp_A, batteryRemain_Percent_A
-	global lastBattery_Year_A, lastBattery_Mon_A, lastBattery_Day_A
-	global nextBattery_Year_A, nextBattery_Mon_A, nextBattery_Day_A
-	global serialName_B, systemMode_B, ups_Life_B
-	global inputLine_B, inputFreq_B, inputVolt_B
-	global outputLine_B, outputFreq_B, outputVolt_B, outputWatt_B, outputAmp_B, outputPercent_B
-	global batteryHealth_B, batteryStatus_B, batteryCharge_Mode_B
-	global batteryRemain_Min_B, batteryRemain_Sec_B, batteryVolt_B, batteryTemp_B, batteryRemain_Percent_B
-	global lastBattery_Year_B, lastBattery_Mon_B, lastBattery_Day_B
-	global nextBattery_Year_B, nextBattery_Mon_B, nextBattery_Day_B
-	localOS = os.system('uname 2>&1 >/var/tmp/os.txt')
-	if(localOS == 0):
-		response = os.system('ping -c 1 ' + hostname + ' 2>&1 >/var/tmp/ping.txt')
-	else:
-		response = os.system('ping -n 1 ' + hostname + ' 2>&1 >ping.txt')
-	if response == 0:						# check network sevice & server is on
-		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		result = sock.connect_ex((hostname, int(port)))
-		if result == 0:
-			sock.close()
-			releaseTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-			print ('Data Relaod : ', releaseTime)
-			distance = 'http://' + hostname + ':' + port
-			r = requests.get(distance)
-			value = r.content.decode('utf-8')	# get return json value
-	#		print(value)
-			key = json.loads(value)
-	#		print (json.dumps(key , sort_keys=True, indent=4, separators=(',', ': ')))	# show on the all split json format
-	#		change the json key to local temp value
-			ups_Life_A = key['ups_Life_A']
-			serialName_A = key['connect_A']
-			status_A = key['battery_A']['status']
-			batteryHealth_A = status_A['batteryHealth_A']
-			batteryStatus_A = status_A['batteryStatus_A']
-			batteryCharge_Mode_A = status_A['batteryCharge_Mode_A']
-			batteryRemain_Min_A = status_A['batteryRemain_Min_A']
-			batteryRemain_Sec_A = status_A['batteryRemain_Sec_A']
-			batteryVolt_A = status_A['batteryVolt_A']
-			batteryTemp_A = status_A['batteryTemp_A']
-			batteryRemain_Percent_A = status_A['batteryRemain_Percent_A']
-			lastBattery_A = key['battery_A']['lastChange']
-			nextBattery_A = key['battery_A']['nextChange']
-			inputStatus_A = key['input_A']
-			outputStatus_A = key['output_A']
-			inputLine_A = inputStatus_A['inputLine_A']
-			inputFreq_A = inputStatus_A['inputFreq_A']
-			inputVolt_A = inputStatus_A['inputVolt_A']
-			systemMode_A = outputStatus_A['systemMode_A']
-			outputLine_A = outputStatus_A['outputLine_A']
-			outputFreq_A = outputStatus_A['outputFreq_A']
-			outputVolt_A = outputStatus_A['outputVolt_A']
-			outputAmp_A = outputStatus_A['outputAmp_A']
-			outputWatt_A = outputStatus_A['outputWatt_A']
-			outputPercent_A = outputStatus_A['outputPercent_A']
-			lastBattery_Year_A = lastBattery_A['lastBattery_Year_A']
-			lastBattery_Mon_A = lastBattery_A['lastBattery_Mon_A']
-			lastBattery_Day_A = lastBattery_A['lastBattery_Day_A']
-			nextBattery_Year_A = nextBattery_A['nextBattery_Year_A']
-			nextBattery_Mon_A = nextBattery_A['nextBattery_Mon_A']
-			nextBattery_Day_A = nextBattery_A['nextBattery_Day_A']
-			ups_Life_B = key['ups_Life_B']
-			serialName_B = key['connect_B']
-			status_B = key['battery_B']['status']
-			batteryHealth_B = status_B['batteryHealth_B']
-			batteryStatus_B = status_B['batteryStatus_B']
-			batteryCharge_Mode_B = status_B['batteryCharge_Mode_B']
-			batteryRemain_Min_B = status_B['batteryRemain_Min_B']
-			batteryRemain_Sec_B = status_B['batteryRemain_Sec_B']
-			batteryVolt_B = status_B['batteryVolt_B']
-			batteryTemp_B = status_B['batteryTemp_B']
-			batteryRemain_Percent_B = status_B['batteryRemain_Percent_B']
-			lastBattery_B = key['battery_B']['lastChange']
-			nextBattery_B = key['battery_B']['nextChange']
-			inputStatus_B = key['input_B']
-			outputStatus_B = key['output_B']
-			inputLine_B = inputStatus_B['inputLine_B']
-			inputFreq_B = inputStatus_B['inputFreq_B']
-			inputVolt_B = inputStatus_B['inputVolt_B']
-			systemMode_B = outputStatus_B['systemMode_B']
-			outputLine_B = outputStatus_B['outputLine_B']
-			outputFreq_B = outputStatus_B['outputFreq_B']
-			outputVolt_B = outputStatus_B['outputVolt_B']
-			outputAmp_B = outputStatus_B['outputAmp_B']
-			outputWatt_B = outputStatus_B['outputWatt_B']
-			outputPercent_B = outputStatus_B['outputPercent_B']
-			lastBattery_Year_B = lastBattery_B['lastBattery_Year_B']
-			lastBattery_Mon_B = lastBattery_B['lastBattery_Mon_B']
-			lastBattery_Day_B = lastBattery_B['lastBattery_Day_B']
-			nextBattery_Year_B = nextBattery_B['nextBattery_Year_B']
-			nextBattery_Mon_B = nextBattery_B['nextBattery_Mon_B']
-			nextBattery_Day_B = nextBattery_B['nextBattery_Day_B']
-			hostHealth = 'Alive'
-		else:
-			print ('http://' + hostname +':' + port + ' Service Port Found !')
-			hostHealth = 'Port-Error'
-			sys.exit(1)
-	else:
-		print ('http://', hostname, ' Server IP Not Found !')
-		hostHealth = 'IP-Error'
-		sys.exit(1)
-	return render_template('mainBoard.html', \
-				releaseTime = releaseTime, \
-		 		hostname = hostname, \
-		 		port = port, \
-		 		hostHealth = hostHealth, \
-		 		serName_A = serialName_A, \
-		 		ups_Life_A = ups_Life_A, \
-		 		inputVolt_A = inputVolt_A, \
-		 		inputFreq_A = inputFreq_A, \
-		 		inputLine_A = inputLine_A, \
-		 		systemMode_A = str(systemMode_A), \
-				outputLine_A = outputLine_A, \
-				outputVolt_A = outputVolt_A, \
-				outputAmp_A = Decimal(outputAmp_A)*1, \
-		 		outputPercent_A = outputPercent_A, \
-		 		outputWatt_A = outputWatt_A, \
-		 		outputFreq_A = outputFreq_A, \
-		 		batteryHealth_A = batteryHealth_A, \
-		 		batteryStatus_A = batteryStatus_A, \
-		 		batteryCharge_Mode_A = batteryCharge_Mode_A, \
-		 		batteryRemain_Min_A = batteryRemain_Min_A, \
-		 		batteryRemain_Sec_A = batteryRemain_Sec_A, \
-		 		batteryVolt_A = batteryVolt_A, \
-		 		batteryTemp_A = batteryTemp_A, \
-		 		batteryRemain_Percent_A = batteryRemain_Percent_A, \
-		 		lastBattery_Year_A = lastBattery_Year_A, \
-		 		lastBattery_Mon_A = lastBattery_Mon_A, \
-		 		lastBattery_Day_A = lastBattery_Day_A, \
-		 		nextBattery_Year_A = nextBattery_Year_A, \
-		 		nextBattery_Mon_A = nextBattery_Mon_A, \
-		 		nextBattery_Day_A = nextBattery_Day_A, \
-		 		serName_B = serialName_B, \
-		 		ups_Life_B = ups_Life_B, \
-				inputVolt_B = inputVolt_B, \
-				inputFreq_B = inputFreq_B, \
-				inputLine_B = inputLine_B, \
-				systemMode_B = str(systemMode_B), \
-				outputLine_B = outputLine_B, \
-				outputVolt_B = outputVolt_B, \
-				outputAmp_B = Decimal(outputAmp_B)*1, \
-				outputPercent_B = outputPercent_B, \
-				outputWatt_B = outputWatt_B, \
-				outputFreq_B = outputFreq_B, \
-				batteryHealth_B = batteryHealth_B, \
-				batteryStatus_B = batteryStatus_B, \
-				batteryCharge_Mode_B = batteryCharge_Mode_B, \
-				batteryRemain_Min_B = batteryRemain_Min_B, \
-				batteryRemain_Sec_B = batteryRemain_Sec_B, \
-				batteryVolt_B = batteryVolt_B, \
-				batteryTemp_B = batteryTemp_B, \
-				batteryRemain_Percent_B = batteryRemain_Percent_B, \
-				lastBattery_Year_B = lastBattery_Year_B, \
-				lastBattery_Mon_B = lastBattery_Mon_B, \
-				lastBattery_Day_B = lastBattery_Day_B, \
-				nextBattery_Year_B = nextBattery_Year_B, \
-				nextBattery_Mon_B = nextBattery_Mon_B, \
-				nextBattery_Day_B = nextBattery_Day_B, \
-		 		)
 
+@app.route('/')
+def root():
+	login_check = url_for('login')
+	return redirect(login_check)
+
+@app.route('/now/<user_id>', methods=['POST', 'GET'])
+def index(user_id):
+	if request.method == 'GET':
+		conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+		cursor = conn.cursor()
+		temp = "SELECT mId FROM member"
+	#	print(temp)
+		cursor.execute(temp)
+		memberList = cursor.fetchall()
+		conn.commit()
+		cursor.close()
+		tmp = ''
+		for x in range(0, len(memberList)):
+			tmp = ''
+			for y in list(str(memberList[x]).split("'")[1]):
+				if y != ' ':
+				#	print('/' + y + '/')
+					tmp = tmp + y
+				else:
+					break
+			if tmp == user_id:
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+				cursor = conn.cursor()
+				temp = "SELECT mIP FROM member WHERE mId = '" + user_id + "'"
+			#	print(temp)
+				cursor.execute(temp)
+				ipList = cursor.fetchall()
+				conn.commit()
+				cursor.close()
+				tmp = ''
+				for z in list(str(ipList[0]).split("'")[1]):
+					if z != ' ':
+					#	print('/' + z + '/')
+						tmp = tmp + z
+					else:
+						break
+				if tmp == request.remote_addr:		
+					print('Login IP :' + tmp)
+					global releaseTime, hostname, port, hostHealth
+					global serialName_A, systemMode_A, ups_Life_A, inputLine_A, inputFreq_A, inputVolt_A
+					global outputLine_A, outputFreq_A, outputVolt_A, outputWatt_A, outputAmp_A, outputPercent_A
+					global batteryHealth_A, batteryStatus_A, batteryCharge_Mode_A
+					global batteryRemain_Min_A, batteryRemain_Sec_A, batteryVolt_A, batteryTemp_A, batteryRemain_Percent_A
+					global lastBattery_Year_A, lastBattery_Mon_A, lastBattery_Day_A, nextBattery_Year_A, nextBattery_Mon_A, nextBattery_Day_A
+					global serialName_B, systemMode_B, ups_Life_B,  inputLine_B, inputFreq_B, inputVolt_B
+					global outputLine_B, outputFreq_B, outputVolt_B, outputWatt_B, outputAmp_B, outputPercent_B
+					global batteryHealth_B, batteryStatus_B, batteryCharge_Mode_B
+					global batteryRemain_Min_B, batteryRemain_Sec_B, batteryVolt_B, batteryTemp_B, batteryRemain_Percent_B
+					global lastBattery_Year_B, lastBattery_Mon_B, lastBattery_Day_B, nextBattery_Year_B, nextBattery_Mon_B, nextBattery_Day_B
+					localOS = os.system('uname 2>&1 >/var/tmp/os.txt')
+					if(localOS == 0):
+						response = os.system('ping -c 1 ' + hostname + ' 2>&1 >/var/tmp/ping.txt')
+					else:
+						response = os.system('ping -n 1 ' + hostname + ' 2>&1 >ping.txt')
+					if response == 0:						# check network sevice & server is on
+						sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+						result = sock.connect_ex((hostname, int(port)))
+						if result == 0:
+							sock.close()
+							releaseTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+							print ('Data Relaod : ', releaseTime)
+							distance = 'http://' + hostname + ':' + port
+							r = requests.get(distance)
+							value = r.content.decode('utf-8')	# get return json value
+					#		print(value)
+							key = json.loads(value)
+					#		print (json.dumps(key , sort_keys=True, indent=4, separators=(',', ': ')))	# show on the all split json format
+					#		change the json key to local temp value
+							ups_Life_A = key['ups_Life_A']
+							serialName_A = key['connect_A']
+							status_A = key['battery_A']['status']
+							batteryHealth_A = status_A['batteryHealth_A']
+							batteryStatus_A = status_A['batteryStatus_A']
+							batteryCharge_Mode_A = status_A['batteryCharge_Mode_A']
+							batteryRemain_Min_A = status_A['batteryRemain_Min_A']
+							batteryRemain_Sec_A = status_A['batteryRemain_Sec_A']
+							batteryVolt_A = status_A['batteryVolt_A']
+							batteryTemp_A = status_A['batteryTemp_A']
+							batteryRemain_Percent_A = status_A['batteryRemain_Percent_A']
+							lastBattery_A = key['battery_A']['lastChange']
+							nextBattery_A = key['battery_A']['nextChange']
+							inputStatus_A = key['input_A']
+							outputStatus_A = key['output_A']
+							inputLine_A = inputStatus_A['inputLine_A']
+							inputFreq_A = inputStatus_A['inputFreq_A']
+							inputVolt_A = inputStatus_A['inputVolt_A']
+							systemMode_A = outputStatus_A['systemMode_A']
+							outputLine_A = outputStatus_A['outputLine_A']
+							outputFreq_A = outputStatus_A['outputFreq_A']
+							outputVolt_A = outputStatus_A['outputVolt_A']
+							outputAmp_A = outputStatus_A['outputAmp_A']
+							outputWatt_A = outputStatus_A['outputWatt_A']
+							outputPercent_A = outputStatus_A['outputPercent_A']
+							lastBattery_Year_A = lastBattery_A['lastBattery_Year_A']
+							lastBattery_Mon_A = lastBattery_A['lastBattery_Mon_A']
+							lastBattery_Day_A = lastBattery_A['lastBattery_Day_A']
+							nextBattery_Year_A = nextBattery_A['nextBattery_Year_A']
+							nextBattery_Mon_A = nextBattery_A['nextBattery_Mon_A']
+							nextBattery_Day_A = nextBattery_A['nextBattery_Day_A']
+							ups_Life_B = key['ups_Life_B']
+							serialName_B = key['connect_B']
+							status_B = key['battery_B']['status']
+							batteryHealth_B = status_B['batteryHealth_B']
+							batteryStatus_B = status_B['batteryStatus_B']
+							batteryCharge_Mode_B = status_B['batteryCharge_Mode_B']
+							batteryRemain_Min_B = status_B['batteryRemain_Min_B']
+							batteryRemain_Sec_B = status_B['batteryRemain_Sec_B']
+							batteryVolt_B = status_B['batteryVolt_B']
+							batteryTemp_B = status_B['batteryTemp_B']
+							batteryRemain_Percent_B = status_B['batteryRemain_Percent_B']
+							lastBattery_B = key['battery_B']['lastChange']
+							nextBattery_B = key['battery_B']['nextChange']
+							inputStatus_B = key['input_B']
+							outputStatus_B = key['output_B']
+							inputLine_B = inputStatus_B['inputLine_B']
+							inputFreq_B = inputStatus_B['inputFreq_B']
+							inputVolt_B = inputStatus_B['inputVolt_B']
+							systemMode_B = outputStatus_B['systemMode_B']
+							outputLine_B = outputStatus_B['outputLine_B']
+							outputFreq_B = outputStatus_B['outputFreq_B']
+							outputVolt_B = outputStatus_B['outputVolt_B']
+							outputAmp_B = outputStatus_B['outputAmp_B']
+							outputWatt_B = outputStatus_B['outputWatt_B']
+							outputPercent_B = outputStatus_B['outputPercent_B']
+							lastBattery_Year_B = lastBattery_B['lastBattery_Year_B']
+							lastBattery_Mon_B = lastBattery_B['lastBattery_Mon_B']
+							lastBattery_Day_B = lastBattery_B['lastBattery_Day_B']
+							nextBattery_Year_B = nextBattery_B['nextBattery_Year_B']
+							nextBattery_Mon_B = nextBattery_B['nextBattery_Mon_B']
+							nextBattery_Day_B = nextBattery_B['nextBattery_Day_B']
+							hostHealth = 'Alive'
+						else:
+							print ('http://' + hostname +':' + port + ' Service Port Found !')
+							hostHealth = 'Port-Error'
+					else:
+						print ('http://', hostname, ' Server IP Not Found !')
+						hostHealth = 'IP-Error'
+					return render_template('mainBoard.html', \
+								user_id = user_id, \
+								releaseTime = releaseTime, \
+								hostname = hostname, \
+								port = port, \
+								hostHealth = hostHealth, \
+								serName_A = serialName_A, \
+								ups_Life_A = ups_Life_A, \
+								inputVolt_A = inputVolt_A, \
+								inputFreq_A = inputFreq_A, \
+								inputLine_A = inputLine_A, \
+								systemMode_A = str(systemMode_A), \
+								outputLine_A = outputLine_A, \
+								outputVolt_A = outputVolt_A, \
+								outputAmp_A = Decimal(outputAmp_A)*1, \
+								outputPercent_A = outputPercent_A, \
+								outputWatt_A = outputWatt_A, \
+								outputFreq_A = outputFreq_A, \
+								batteryHealth_A = batteryHealth_A, \
+								batteryStatus_A = batteryStatus_A, \
+								batteryCharge_Mode_A = batteryCharge_Mode_A, \
+								batteryRemain_Min_A = batteryRemain_Min_A, \
+								batteryRemain_Sec_A = batteryRemain_Sec_A, \
+								batteryVolt_A = batteryVolt_A, \
+								batteryTemp_A = batteryTemp_A, \
+								batteryRemain_Percent_A = batteryRemain_Percent_A, \
+								lastBattery_Year_A = lastBattery_Year_A, \
+								lastBattery_Mon_A = lastBattery_Mon_A, \
+								lastBattery_Day_A = lastBattery_Day_A, \
+								nextBattery_Year_A = nextBattery_Year_A, \
+								nextBattery_Mon_A = nextBattery_Mon_A, \
+								nextBattery_Day_A = nextBattery_Day_A, \
+								serName_B = serialName_B, \
+								ups_Life_B = ups_Life_B, \
+								inputVolt_B = inputVolt_B, \
+								inputFreq_B = inputFreq_B, \
+								inputLine_B = inputLine_B, \
+								systemMode_B = str(systemMode_B), \
+								outputLine_B = outputLine_B, \
+								outputVolt_B = outputVolt_B, \
+								outputAmp_B = Decimal(outputAmp_B)*1, \
+								outputPercent_B = outputPercent_B, \
+								outputWatt_B = outputWatt_B, \
+								outputFreq_B = outputFreq_B, \
+								batteryHealth_B = batteryHealth_B, \
+								batteryStatus_B = batteryStatus_B, \
+								batteryCharge_Mode_B = batteryCharge_Mode_B, \
+								batteryRemain_Min_B = batteryRemain_Min_B, \
+								batteryRemain_Sec_B = batteryRemain_Sec_B, \
+								batteryVolt_B = batteryVolt_B, \
+								batteryTemp_B = batteryTemp_B, \
+								batteryRemain_Percent_B = batteryRemain_Percent_B, \
+								lastBattery_Year_B = lastBattery_Year_B, \
+								lastBattery_Mon_B = lastBattery_Mon_B, \
+								lastBattery_Day_B = lastBattery_Day_B, \
+								nextBattery_Year_B = nextBattery_Year_B, \
+								nextBattery_Mon_B = nextBattery_Mon_B, \
+								nextBattery_Day_B = nextBattery_Day_B, \
+								)
+				else:
+					print('USER NOT ON Member List !')
+					print('-------------------------------')
+					return redirect('/login')
+			if x == len(memberList) - 1:
+				print('USER NOT LOGIN !')
+				print('-------------------------------')
+				return redirect('/login')
+	else:
+		conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+		cursor = conn.cursor()
+		temp = "UPDATE member SET mIP = '0.0.0.0' WHERE mId = '" + user_id + "'"
+	#	print(temp)
+		cursor.execute(temp)
+		conn.commit()
+		cursor.close()
+		return redirect('/login')
 @app.route('/history/<user_id>', methods=['POST', 'GET'])
 def history(user_id):
 	if request.method == 'GET':
-		if user_id != j13tw:
-			login_check = url_for('login')
-			return redirect(login_check)
-		else:
-			return '這是歷史頁面-%s' % user_id
+		return '這是歷史頁面-%s' % user_id
 	else:
 		pass
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+	print('-------------------------------')
+	print("Login Client IP : " + request.remote_addr)
 	if request.method == 'GET':
 		return render_template('login.html')
 	else:
-		pass
+		errorCode = 0
+		user_error = ''
+		ups_error = ''
+		print(request.form)
+		user_id = request.form.get('user_id')
+		for x in list(user_id):
+			if x == ' ':
+				errorCode = 1
+		print("errorCode = " + str(errorCode))
+		if user_id != '' and errorCode != 1 and len(user_id) <= 10 and len(user_id) >= 4:
+			conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+			cursor = conn.cursor()
+			cursor.execute("SELECT mId FROM member")
+			memberList = cursor.fetchall()
+			conn.close()
+			tmp = ''
+		#	print(memberList)
+			for x in range(0, len(memberList)):
+				tmp = ''
+				for y in list(str(memberList[x]).split("'")[1]):
+					if y != ' ':
+					#	print('/' + y + '/')
+						tmp = tmp + y
+					else:
+						break
+				if tmp == user_id:
+					print(user_id)
+					user_pwd = request.form.get('user_pwd')
+					for x in list(user_id):
+						if x == ' ':
+							errorCode = 1
+							break
+					if user_pwd != '' and errorCode != 1:
+						conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+						cursor = conn.cursor()
+						temp = "SELECT mPassword FROM member WHERE mId = '" + tmp + "'"
+					#	print(temp)
+						cursor.execute(temp)
+						checkPassword = cursor.fetchall()
+					#	print(checkPassword)
+						cursor.close()
+						checkMember = 0
+						password = ''
+						for z in list(str(checkPassword[0]).split("'")[1]):
+							if z != ' ':
+							#	print('/' + z + '/')
+								password = password + z
+							else:
+								break
+						if user_pwd == password:
+							conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+							cursor = conn.cursor()
+							temp = "UPDATE member SET mIP = '" + request.remote_addr + "' WHERE mId = '" + user_id + "'"
+							print(temp)
+							cursor.execute(temp)
+							conn.commit()
+							cursor.close()
+							login_ok = url_for('index', user_id = user_id)
+							return redirect(login_ok)
+						else:
+							print('user_pwd Error !')
+							errorCode = 1
+					else:
+						print('user_pwd Error !')
+						errorCode = 1
+				if x == len(memberList) - 1:
+					print('user_id Error !')
+					errorCode = 1
+		if user_id == '' or errorCode == 1:
+			print('user Error !')
+			print('-------------------------------')
+			user_error = '請確認輸入的帳戶'
+			return render_template('login.html', user_error = user_error, ups_error = ups_error)
+
 
 @app.route('/user_signup', methods=['GET', 'POST'])
 def user_signup():
@@ -282,7 +405,7 @@ def user_signup():
 					countUpper = countUpper + 1
 				elif ord(x) >= 48 and ord(x) <= 57:
 					countNumber = countNumber + 1
-			if user_pwd != '' and len(user_pwd) > 8 and len(user_id) <= 30 and countLower > 0 or countUpper > 0 or countNumber > 0 and errorCode == 0:
+			if user_pwd != '' and len(user_pwd) > 8 and len(user_pwd) <= 30 and countLower > 0 or countUpper > 0 or countNumber > 0 and errorCode == 0:
 				print("user_pwd : " + user_pwd)
 				user_name = request.form.get('user_name')
 				for x in list(user_name):
@@ -368,15 +491,58 @@ def user_signup():
 			error = '請確認輸入的帳號'
 			return render_template('userSignup.html', error = error)
 
-@app.route('/ups_signup', methods=['GET', 'POST'])
-def ups_signup():
+@app.route('/ups_signup/<user_id>', methods=['GET', 'POST'])
+def ups_signup(user_id):
 	print('-------------------------------')
 	print("UPS Regist Client IP : " + request.remote_addr)
 	errorCode = 0
 	if request.method == 'GET':	
 		print('-------------------------------')
 		error = ''
-		return render_template('upsSignup.html', error = error)
+		conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+		cursor = conn.cursor()
+		temp = "SELECT mId FROM member"
+	#	print(temp)
+		cursor.execute(temp)
+		memberList = cursor.fetchall()
+		conn.commit()
+		cursor.close()
+		tmp = ''
+		for x in range(0, len(memberList)):
+			tmp = ''
+			for y in list(str(memberList[x]).split("'")[1]):
+				if y != ' ':
+				#	print('/' + y + '/')
+					tmp = tmp + y
+				else:
+					break
+			if tmp == user_id:
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+				cursor = conn.cursor()
+				temp = "SELECT mIP FROM member WHERE mId = '" + user_id + "'"
+			#	print(temp)
+				cursor.execute(temp)
+				ipList = cursor.fetchall()
+				conn.commit()
+				cursor.close()
+				tmp = ''
+				for z in list(str(ipList[0]).split("'")[1]):
+					if z != ' ':
+					#	print('/' + z + '/')
+						tmp = tmp + z
+					else:
+						break
+				if tmp == request.remote_addr:		
+					print('Login IP :' + tmp)
+					return render_template('upsSignup.html', user_id = user_id)
+				else:
+					print('USER NOT ON Member List !')
+					print('-------------------------------')
+					return redirect('/login')
+			if x == len(memberList) - 1:
+				print('USER NOT LOGIN !')
+				print('-------------------------------')
+				return redirect('/login')
 	else:
 		print('-------------------------------')
 		print (request.form)
@@ -437,99 +603,110 @@ def ups_signup():
 					error = '請確認管理者 ID 是否存在'
 					return render_template('upsSignup.html', error = error)
 				else:
-					ups_ip = request.form.get('ups_ip')
-					try:
-						ip = ups_ip.split(":")[0].split('.')
-						port = int(ups_ip.split(":")[1])
-					except:
-						errorCode = 1
-				#	print("IP : " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3])
-				#	print("PORT : " + str(port))
-					if ups_ip != '' and errorCode!= 1 and len(ip) == 4 and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
-						print("ups_ip : " + ups_ip)
-						ups_create = request.form.get('ups_create')
-						if (ups_create != 'None'):
-							ups_model = request.form.get('ups_model')
-							print('ups_model : ' + ups_model)
-							if (ups_model != 'None'):
-								ups_unit = request.form.get('ups_unit')
-								print('ups_unit : ' + ups_unit)
-								ups_number = request.form.get('ups_number')
-								if (ups_number != ''):
-									print('ups_number : ' + ups_number)
-									ups_locate = request.form.get('ups_locate')
-									if (ups_locate != ''):
-										print('ups_locate : ' + ups_locate)
-										ups_rule = request.form.get('ups_rule')
-										if ups_rule != None:
-											ups_collect = request.form.get('ups_collect')
-											if ups_collect != None:
-												ups_collect=0
-											else:
-												ups_collect=1
-											print("ups_collect : " + str(ups_collect))
-											conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
-											cursor = conn.cursor()
-											cursor.execute('SELECT uId FROM ups')
-											upsList = cursor.fetchall()
-											cursor.close()
-											for x in range(0, len(upsList)):
-											#	print(str(upsList[x]))
-												tmp = ''
-												for y in list(str(upsList[x]).split("'")[1]):
-													if y != ' ':
-													#	print('/' + y + '/')
-														tmp = tmp + y
-													else:
-														break
-												if tmp == ups_id:
-													errorCode = 1
-											#	print(tmp)
-											if errorCode == 0:
+					ups_name = request.form.get('ups_name')
+					for x in list(ups_name):
+						if x == ' ':
+							errorCode = 1
+							break
+					if ups_name != '' and errorCode != 1:
+						ups_ip = request.form.get('ups_ip')
+						try:
+							ip = ups_ip.split(":")[0].split('.')
+							port = int(ups_ip.split(":")[1])
+						except:
+							errorCode = 1
+					#	print("IP : " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3])
+					#	print("PORT : " + str(port))
+						if ups_ip != '' and errorCode!= 1 and len(ip) == 4 and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
+							print("ups_ip : " + ups_ip)
+							ups_create = request.form.get('ups_create')
+							if (ups_create != 'None'):
+								ups_model = request.form.get('ups_model')
+								print('ups_model : ' + ups_model)
+								if (ups_model != 'None'):
+									ups_unit = request.form.get('ups_unit')
+									print('ups_unit : ' + ups_unit)
+									ups_number = request.form.get('ups_number')
+									if (ups_number != ''):
+										print('ups_number : ' + ups_number)
+										ups_locate = request.form.get('ups_locate')
+										if (ups_locate != ''):
+											print('ups_locate : ' + ups_locate)
+											ups_rule = request.form.get('ups_rule')
+											if ups_rule != None:
+												ups_collect = request.form.get('ups_collect')
+												if ups_collect != None:
+													ups_collect=0
+												else:
+													ups_collect=1
+												print("ups_collect : " + str(ups_collect))
+												conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 												cursor = conn.cursor()
-												addUPS = "INSERT INTO dbo.ups (uId, mId, uIP, uFactory, uModel, uUnit, uNumber, uDistance, uCollect) VALUES ('" + ups_id + "' , '" + user_id + "', '" + ups_ip + "', '" +  ups_create + "', '" + ups_model + "', '" + ups_unit + "', '" + ups_number + "', '" + ups_locate +  "', " + str(ups_collect) + ")"
-												print(addUPS)
-												cursor.execute(addUPS)
-												conn.commit()
-												conn.close()
-												print("DB Incert : OK !")
-												print('-------------------------------')
-												login_check = url_for('login')
-												return redirect(login_check)
+												cursor.execute('SELECT uId FROM ups')
+												upsList = cursor.fetchall()
+												cursor.close()
+												for x in range(0, len(upsList)):
+												#	print(str(upsList[x]))
+													tmp = ''
+													for y in list(str(upsList[x]).split("'")[1]):
+														if y != ' ':
+														#	print('/' + y + '/')
+															tmp = tmp + y
+														else:
+															break
+													if tmp == ups_id:
+														errorCode = 1
+												#	print(tmp)
+												if errorCode == 0:
+													cursor = conn.cursor()
+													addUPS = "INSERT INTO dbo.ups (uId, mId, uName, uIP, uFactory, uModel, uUnit, uNumber, uDistance, uCollect) VALUES ('" + ups_id + "' , '" + user_id + "', '" + ups_name + "', '" + ups_ip + "', '" +  ups_create + "', '" + ups_model + "', '" + ups_unit + "', '" + ups_number + "', '" + ups_locate +  "', " + str(ups_collect) + ")"
+													print(addUPS)
+													cursor.execute(addUPS)
+													conn.commit()
+													conn.close()
+													print("DB Incert : OK !")
+													print('-------------------------------')
+													login_check = url_for('login')
+													return redirect(login_check)
+												else:
+													print("DB Incert : NO !")
+													print('-------------------------------')
+													error = '此設備ID被使用，請進行更改'
+													return render_template('upsSignup.html', error = error)
 											else:
-												print("DB Incert : NO !")
+												print('ups_acess Error !')
 												print('-------------------------------')
-												error = '此設備ID被使用，請進行更改'
+												error = '請確認已閱讀UPS設備託管條文'
 												return render_template('upsSignup.html', error = error)
 										else:
-											print('ups_acess Error !')
+											print('ups_locate Error !')
 											print('-------------------------------')
-											error = '請確認已閱讀UPS設備託管條文'
+											error = '請填寫設備的放置區域或備註信息'
 											return render_template('upsSignup.html', error = error)
 									else:
-										print('ups_locate Error !')
+										print('ups_number Error !')
 										print('-------------------------------')
-										error = '請填寫設備的放置區域或備註信息'
-										return render_template('upsSignup.html', error = error)
+										error = '請確認設備的識別編號'
+										return render_template('upsSignup.html', error = error)	
 								else:
-									print('ups_number Error !')
+									print('ups_model Error !')
 									print('-------------------------------')
-									error = '請確認設備的識別編號'
-									return render_template('upsSignup.html', error = error)	
+									error = '請確認設備的所屬系列'
+								return render_template('upsSignup.html', error = error)	
 							else:
-								print('ups_model Error !')
+								print('ups_create Error !')
 								print('-------------------------------')
-								error = '請確認設備的所屬系列'
-							return render_template('upsSignup.html', error = error)	
+								error = '請確認設備的生產廠區'
+								return render_template('upsSignup.html', error = error)	
 						else:
-							print('ups_create Error !')
+							print('ups_ip Error !')
 							print('-------------------------------')
-							error = '請確認設備的生產廠區'
+							error = '請確認輸入的託管 IP'
 							return render_template('upsSignup.html', error = error)	
 					else:
-						print('ups_ip Error !')
+						print('ups_name Error !')
 						print('-------------------------------')
-						error = '請確認輸入的託管 IP'
+						error = '請確認輸入的託管 設備名稱'
 						return render_template('upsSignup.html', error = error)	
 			else:
 				print('user_id Error !')
@@ -542,22 +719,241 @@ def ups_signup():
 			error = '請確認輸入的 UPS 編號'
 			return render_template('upsSignup.html', error = error)
 
-@app.route('/user_replace', methods=['GET', 'POST'])
-def user_replace():
-	if request.method == 'GET':
-		return render_template('userReplace.html', error = "修改之資料未輸入則保留原設置")
+@app.route('/user_replace/<user_id>', methods=['GET', 'POST'])
+def user_replace(user_id):
+	print('-------------------------------')
+	print("USER Replace Client IP : " + request.remote_addr)
+	errorCode = 0
+	if request.method == 'GET':	
+		print('-------------------------------')
+		error = ''
+		return render_template('userReplace.html', error = error, user_id = user_id)
 	else:
-		pass
+		print('-------------------------------')
+		print (request.form)
+		user_id = request.form.get('user_id')
+		for x in list(user_id):
+			if x == ' ':
+				errorCode = 1
+				break
+		if user_id != '' and errorCode == 0 and len(user_id) <= 10 and len(user_id) >= 4:
+			print("user_id : " + user_id)
+			conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+			cursor = conn.cursor()
+			cursor.execute('SELECT uId FROM ups')
+			upsList = cursor.fetchall()
+			cursor.close()
+			for x in range(0, len(upsList)):
+			#	print(str(upsList[x]))
+				tmp = ''
+				for y in list(str(upsList[x]).split("'")[1]):
+					if y != ' ':
+					#	print('/' + y + '/')
+						tmp = tmp + y
+					else:
+						break
+				if tmp == ups_id:	
+				#	print(tmp)
+					user_id = request.form.get('user_id')
+					for x in list(user_id):
+						if x == ' ':
+							errorCode = 1
+					if user_id != '' and errorCode == 0 and len(user_id) <= 10 and len(user_id) >= 4:
+						print("user_id : " + user_id)
+						conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+						cursor = conn.cursor()
+						cursor.execute("SELECT mId FROM ups WHERE uId = '" + ups_id + "'")
+						memberList = cursor.fetchall()
+						conn.close()
+						tmp = ''
+						for y in list(str(memberList[0]).split("'")[1]):
+							if y != ' ':
+							#	print('/' + y + '/')
+								tmp = tmp + y
+							else:
+								break
+						if tmp == user_id:
+							user_pwd = request.form.get('user_pwd')
+							for x in list(user_id):
+								if x == ' ':
+									errorCode = 1
+									break
+							if user_pwd != '' and errorCode != 1:
+								conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+								cursor = conn.cursor()
+								temp = "SELECT mPassword FROM member WHERE mId = '" + tmp + "'"
+							#	print(temp)
+								cursor.execute(temp)
+								checkPassword = cursor.fetchall()
+								print(checkPassword)
+								cursor.close()
+								checkMember = 0
+								password = ''
+								for z in list(str(checkPassword[0]).split("'")[1]):
+									if z != ' ':
+									#	print('/' + z + '/')
+										password = password + z
+									else:
+										break
+								print(password)
+								if user_pwd == password:
+									checkMember = checkMember + 1
+						#	print(checkMember)
+							if checkMember == 1:
+								ups_ip = request.form.get('ups_ip')
+								for x in list(ups_ip):
+									if x == ' ' and errorCode != 1:
+										errorCode = 1
+										break
+								if ups_ip != '':
+									try:
+										ip = ups_ip.split(":")[0].split('.')
+										port = int(ups_ip.split(":")[1])
+									except:
+										errorCode = 1
+								#	print("IP : " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3])
+								#	print("PORT : " + str(port))
+									if ups_ip != '' and errorCode != 1 and len(ip) == 4 and int(ip[0]) <= 254 and int(ip[1]) <= 254 and int(ip[2]) <= 254 and int(ip[3]) <= 254 and port <= 30080:
+										print("ups_ip : " + ups_ip)
+										conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+										cursor = conn.cursor()
+										temp = "UPDATE ups SET uIP = '" + ups_ip + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+										print(temp)
+										cursor.execute(temp)
+										conn.commit()
+										conn.close()
+									else:
+										print('ups_ip Error !')
+										print('-------------------------------')
+										error = '請確認輸入的託管 IP'
+										return render_template('upsSignup.html', error = error)
+								ups_create = request.form.get('ups_create')
+								if ups_create != 'None':
+									print("ups_creat : " + ups_create)
+									conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+									cursor = conn.cursor()
+									temp = "UPDATE ups SET uFactory = '" + ups_create + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+									print(temp)
+									cursor.execute(temp)
+									conn.commit()
+									cursor.close()
+								ups_model = request.form.get('ups_model')
+								if ups_model != 'None':
+									print("ups_model : " + ups_model)
+									ups_unit = request.form.get('ups_unit')
+									conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+									cursor = conn.cursor()
+									temp = "UPDATE ups SET uModel = '" + ups_model + "', 'uUnit = '" + ups_unit + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+									print(temp)
+									cursor.execute(temp)
+									conn.commit()
+									cursor.close()
+								ups_locate = request.form.get('ups_locate')
+								for x in list(user_locate):
+									if x == ' ':
+										errorCode = 1
+										break
+								if ups_locate != '' and errorCode != 1:
+									conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+									cursor = conn.cursor()
+									temp = "UPDATE ups SET uDistance = '" + ups_locate + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+								#	print(temp)
+									cursor.execute(temp)
+									conn.commit()
+									cursor.close()
+								ups_collect = request.form.get('ups_collect')
+								if ups_collect != None:
+									ups_collect=0
+								else:
+									ups_collect=1
+									print("ups_collect : " + str(ups_collect))
+								conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+								cursor = conn.cursor()
+								temp = "UPDATE ups SET uCollect = '" + str(ups_collect) + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+							#	print(temp)
+								cursor.execute(temp)
+								conn.commit()
+								cursor.close()
+								print('驗證成功')
+								print('-------------------------------')
+								error = '驗證成功'
+								return render_template('upsReplace.html', error = error)
+								
+							else:
+								errorCode = 1
+						else:
+							errorCode = 1
+					else:
+						errorCode = 1
+				if x == len(upsList) - 1:
+					errorCode = 1						
+		if (errorCode == 1):
+			print('ups_id Error !')
+			print('-------------------------------')
+			error = '請確認輸入的設備資料'
+			return render_template('upsReplace.html', error = error)
 
-@app.route('/ups_replace', methods=['GET', 'POST'])
-def ups_replace():
+@app.route('/ups_replace/<user_id>', methods=['GET', 'POST'])
+def ups_replace(user_id):
 	print('-------------------------------')
 	print("UPS Replace Client IP : " + request.remote_addr)
 	errorCode = 0
 	if request.method == 'GET':	
 		print('-------------------------------')
 		error = ''
-		return render_template('upsReplace.html', error = error)
+		conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+		cursor = conn.cursor()
+		temp = "SELECT mId FROM member"
+		cursor.execute(temp)
+		memberList = cursor.fetchall()
+		print(memberList)
+		conn.commit()
+		cursor.close()
+		tmp = ''
+		for x in range(0, len(memberList)):
+			tmp = ''
+			for y in list(str(memberList[x]).split("'")[1]):
+				if y != ' ':
+				#	print('/' + y + '/')
+					tmp = tmp + y
+				else:
+					break
+			print(tmp)
+			if tmp == user_id:
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+				cursor = conn.cursor()
+				temp = "SELECT mIP FROM member WHERE mId = '" + user_id + "'"
+			#	print(temp)
+				cursor.execute(temp)
+				ipList = cursor.fetchall()
+				conn.commit()
+				cursor.close()
+				tmp = ''
+				for z in list(str(ipList[0]).split("'")[1]):
+					if z != ' ':
+					#	print('/' + z + '/')
+						tmp = tmp + z
+					else:
+						break
+				if tmp == request.remote_addr:			
+					print('Login IP :' + tmp)
+					conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+					cursor = conn.cursor()
+					temp = "SELECT uId FROM ups WHERE mId = '" + user_id + "'"
+				#	print(temp)
+					cursor.execute(temp)
+					upsList = cursor.fetchall()
+					print(upsList)
+					cursor.close()
+					return render_template('upsReplace.html', msg = upsList, user_id = user_id)
+				else:
+					print('USER NOT ON Member List !')
+					print('-------------------------------')
+					return redirect('/login')
+			if x == len(memberList) - 1:
+				print('USER NOT LOGIN !')
+				print('-------------------------------')
+				return redirect('/login')
 	else:
 		print('-------------------------------')
 		print (request.form)
@@ -676,12 +1072,8 @@ def ups_replace():
 										ups_unit = request.form.get('ups_unit')
 										conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 										cursor = conn.cursor()
-									#	temp = "UPDATE ups SET uFactory = '" + ups_create + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
-										temp = "UPDATE ups SET uModel = '" + ups_model + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
+										temp = "UPDATE ups SET uModel = '" + ups_model + "', 'uUnit = '" + ups_unit + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
 										print(temp)
-										cursor.execute(temp)
-										temp = "UPDATE ups SET uUnit = '" + ups_unit + "' WHERE uId = '" + ups_id +"' AND mId = '" + user_id + "'"
-									#	print(temp)
 										cursor.execute(temp)
 										conn.commit()
 										cursor.close()
@@ -727,7 +1119,69 @@ def ups_replace():
 			error = '請確認輸入的設備資料'
 			return render_template('upsReplace.html', error = error)			
 
-				
+@app.route('/ups_delete/<user_id>', methods=['GET', 'POST'])
+def ups_delete(user_id):
+	print('-------------------------------')
+	print("UPS Replace Client IP : " + request.remote_addr)
+	errorCode = 0
+	if request.method == 'GET':	
+		print('-------------------------------')
+		error = ''
+		conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+		cursor = conn.cursor()
+		temp = "SELECT mId FROM member"
+		cursor.execute(temp)
+		memberList = cursor.fetchall()
+		print(memberList)
+		conn.commit()
+		cursor.close()
+		tmp = ''
+		for x in range(0, len(memberList)):
+			tmp = ''
+			for y in list(str(memberList[x]).split("'")[1]):
+				if y != ' ':
+				#	print('/' + y + '/')
+					tmp = tmp + y
+				else:
+					break
+			print(tmp)
+			if tmp == user_id:
+				conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+				cursor = conn.cursor()
+				temp = "SELECT mIP FROM member WHERE mId = '" + user_id + "'"
+			#	print(temp)
+				cursor.execute(temp)
+				ipList = cursor.fetchall()
+				conn.commit()
+				cursor.close()
+				tmp = ''
+				for z in list(str(ipList[0]).split("'")[1]):
+					if z != ' ':
+					#	print('/' + z + '/')
+						tmp = tmp + z
+					else:
+						break
+				if tmp == request.remote_addr:			
+					print('Login IP :' + tmp)
+					conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
+					cursor = conn.cursor()
+					temp = "SELECT uId FROM ups WHERE mId = '" + user_id + "'"
+				#	print(temp)
+					cursor.execute(temp)
+					upsList = cursor.fetchall()
+					print(upsList)
+					cursor.close()
+					return render_template('upsDelete.html', msg = upsList, user_id = user_id)
+				else:
+					print('USER NOT ON Member List !')
+					print('-------------------------------')
+					return redirect('/login')
+			if x == len(memberList) - 1:
+				print('USER NOT LOGIN !')
+				print('-------------------------------')
+				return redirect('/login')
+
+
 
 if __name__ == '__main__':
 #	app.run(debug = True)

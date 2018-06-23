@@ -2,81 +2,112 @@
 <html>  
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
-<meta http-equiv="refresh" content="1">
 <title>UPS 監控看板</title>
-</head>
-<body>
-</body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+alert({{hostHealth}})
 if ("{{hostHealth}}" != "Alive"){
 	document.bgColor="red"
 }
-const left = document.createElement('div');
-const right = document.createElement('div');
-left.style.display = 'inline-block';
-right.style.display = 'inline-block';
-left.style.minWidth = "50%";
-left.innerHTML = "\
-	UPS Server Link : {{hostname}}:{{port}} ({{hostHealth}})<br>\
-	-------------------------------------------------------------<br>\
-	UPS 連接位置 : {{serName_A}} ({{ups_Life_A}})<br>\
-	-------------------------------------------------------------<br>\
-	輸入線路 : {{inputLine_A}} 號線路<br>\
-	輸入頻率 : {{inputFreq_A}} Hz<br>\
-	輸入電壓 : {{inputVolt_A}} V<br>\
-	-------------------------------------------------------------<br>\
-	輸出狀態 : {{systemMode_A}}<br>\
-	輸出線路 : {{outputLine_A}} 號線路<br>\
-	輸出頻率 : {{outputFreq_A}} Hz<br>\
-	輸出電壓 : {{outputVolt_A}} V<br>\
-	輸出電流 : {{outputAmp_A}} A<br>\
-	輸出瓦特 : {{outputWatt_A}} KW<br>\
-	輸出負載比 : {{outputPercent_A}} %<br>\
-	-------------------------------------------------------------<br>\
-	電池健康度 : {{batteryHealth_A}}<br>\
-	電池狀態 : {{batteryStatus_A}}<br>\
-	充電模式 : {{batteryCharge_Mode_A}}<br>\
-	電池電壓 : {{batteryVolt_A}} V<br>\
-	輸出剩餘時間(分) : {{batteryRemain_Min_A}}<br>\
-	輸出剩餘時間(秒) : {{batteryRemain_Sec_A}}<br>\
-	電量剩餘百分比 : {{batteryRemain_Percent_A}} %<br>\
-	UPS 內部溫度 : {{batteryTemp_A}} °C<br>\
-	-------------------------------------------------------------<br>\
-	電池更換時間 : {{lastBattery_Year_A}} 年 {{lastBattery_Mon_A}} 月 {{lastBattery_Day_A}} 日<br>\
-	下次更換時間 : {{nextBattery_Year_A}} 年 {{nextBattery_Mon_A}} 月 {{nextBattery_Day_A}} 日<br>\
-	-------------------------------------------------------------\
-";
-right.innerHTML = "\
-	最後更新時間 : {{releaseTime}}<br>\
-	-------------------------------------------------------------<br>\
-	UPS 連接位置 : {{serName_B}} ({{ups_Life_B}})<br>\
-	-------------------------------------------------------------<br>\
-	輸入線路 : {{inputLine_B}} 號線路<br>\
-	輸入頻率 : {{inputFreq_B}} Hz<br>\
-	輸入電壓 : {{inputVolt_B}} V<br>\
-	-------------------------------------------------------------<br>\
-	輸出狀態 : {{systemMode_B}}<br>\
-	輸出線路 : {{outputLine_B}} 號線路<br>\
-	輸出頻率 : {{outputFreq_B}} Hz<br>\
-	輸出電壓 : {{outputVolt_B}} V<br>\
-	輸出電流 : {{outputAmp_B}} A<br>\
-	輸出瓦特 : {{outputWatt_B}} KW<br>\
-	輸出負載比 : {{outputPercent_B}} %<br>\
-	-------------------------------------------------------------<br>\
-	電池健康度 : {{batteryHealth_B}}<br>\
-	電池狀態 : {{batteryStatus_B}}<br>\
-	充電模式 : {{batteryCharge_Mode_B}}<br>\
-	電池電壓 : {{batteryVolt_B}} V<br>\
-	輸出剩餘時間(分) : {{batteryRemain_Min_B}}<br>\
-	輸出剩餘時間(秒) : {{batteryRemain_Sec_B}}<br>\
-	電量剩餘百分比 : {{batteryRemain_Percent_B}} %<br>\
-	UPS 內部溫度 : {{batteryTemp_B}} °C<br>\
-	-------------------------------------------------------------<br>\
-	電池更換時間 : {{lastBattery_Year_B}} 年 {{lastBattery_Mon_B}} 月 {{lastBattery_Day_B}} 日<br>\
-	下次更換時間 : {{nextBattery_Year_B}} 年 {{nextBattery_Mon_B}} 月 {{nextBattery_Day_B}} 日<br>\
-	-------------------------------------------------------------\
-";
-document.body.appendChild(left);
-document.body.appendChild(right);
 </script>
-</html>  
+<style>
+	.block {
+		display: inline-block;
+	}
+	.left {
+		min-width: 50%;
+	}
+	.right {
+		min-width: 50%;
+		float: right;
+	}
+</style>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="row">
+			<h5 class="col-sm-1" align="center"><b> 歡迎管理者 {{user_id}} 登入</b></h5>
+			<button type='btn' class="col-sm-1"><h4><b>登出</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/history/{{user_id}}'"><h4><b>查詢 UPS 設備歷史資料</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/user_replace/{{user_id}}'"><h4><b>編輯 管理者 資料</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/ups_signup/{{user_id}}'"><h4><b>註冊 UPS 設備資料</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/ups_replace/{{user_id}}'"><h4><b>編輯 UPS 設備資料</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/ups_delete/{{user_id}}'"><h4><b>刪除 UPS 設備資料</b></h4></a></button>
+		</div>
+	</form>
+	<form action="" method="POST" class="left block" align = "center" >
+		<div>
+			<br><br>
+			<H3>UPS Server Link : {{hostname}}:{{port}} ({{hostHealth}})</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>UPS 連接位置 : {{serName_A}} ({{ups_Life_A}})
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸入線路 : {{inputLine_A}} 號線路</H3>
+			<H3>輸入頻率 : {{inputFreq_A}} Hz</H3>
+			<H3>輸入電壓 : {{inputVolt_A}} V</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸出狀態 : {{systemMode_A}}</H3>
+			<H3>輸出線路 : {{outputLine_A}} 號線路</H3>
+			<H3>輸出頻率 : {{outputFreq_A}} Hz</H3>
+			<H3>輸出電壓 : {{outputVolt_A}} V</H3>
+			<H3>輸出電流 : {{outputAmp_A}} A</H3>
+			<H3>輸出瓦特 : {{outputWatt_A}} KW</H3>
+			<H3>輸出負載比 : {{outputPercent_A}} %</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池健康度 : {{batteryHealth_A}}</H3>
+			<H3>電池狀態 : {{batteryStatus_A}}</H3>
+			<H3>充電模式 : {{batteryCharge_Mode_A}}</H3>
+			<H3>電池電壓 : {{batteryVolt_A}} V</H3>
+			<H3>輸出剩餘時間(分) : {{batteryRemain_Min_A}}</H3>
+			<H3>輸出剩餘時間(秒) : {{batteryRemain_Sec_A}}</H3>
+			<H3>電量剩餘百分比 : {{batteryRemain_Percent_A}} %</H3>
+			<H3>UPS 內部溫度 : {{batteryTemp_A}} °C</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池更換時間 : {{lastBattery_Year_A}} 年 {{lastBattery_Mon_A}} 月 {{lastBattery_Day_A}} 日</H3>
+			<H3>下次更換時間 : {{nextBattery_Year_A}} 年 {{nextBattery_Mon_A}} 月 {{nextBattery_Day_A}} 日</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<br><br>
+		</div>
+	</form>
+	<form  class="right block" align = "center">
+		<div>
+			<br><br>
+			<H3>UPS Server Link : {{hostname}}:{{port}} ({{hostHealth}})</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>UPS 連接位置 : {{serName_B}} ({{ups_Life_B}})</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸入線路 : {{inputLine_B}} 號線路</H3>
+			<H3>輸入頻率 : {{inputFreq_B}} Hz</H3>
+			<H3>輸入電壓 : {{inputVolt_B}} V</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸出狀態 : {{systemMode_B}}</H3>
+			<H3>輸出線路 : {{outputLine_B}} 號線路</H3>
+			<H3>輸出頻率 : {{outputFreq_B}} Hz</H3>
+			<H3>輸出電壓 : {{outputVolt_B}} V</H3>
+			<H3>輸出電流 : {{outputAmp_B}} A</H3>
+			<H3>輸出瓦特 : {{outputWatt_B}} KW</H3>
+			<H3>輸出負載比 : {{outputPercent_B}} %</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池健康度 : {{batteryHealth_B}}</H3>
+			<H3>電池狀態 : {{batteryStatus_B}}</H3>
+			<H3>充電模式 : {{batteryCharge_Mode_B}}</H3>
+			<H3>電池電壓 : {{batteryVolt_B}} V</H3>
+			<H3>輸出剩餘時間(分) : {{batteryRemain_Min_B}}</H3>
+			<H3>輸出剩餘時間(秒) : {{batteryRemain_Sec_B}}</H3>
+			<H3>電量剩餘百分比 : {{batteryRemain_Percent_B}} %</H3>
+			<H3>UPS 內部溫度 : {{batteryTemp_B}} °C</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池更換時間 : {{lastBattery_Year_B}} 年 {{lastBattery_Mon_B}} 月 {{lastBattery_Day_B}} 日</H3>
+			<H3>下次更換時間 : {{nextBattery_Year_B}} 年 {{nextBattery_Mon_B}} 月 {{nextBattery_Day_B}} 日</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<br><br>
+		</div>
+	</form>
+	<div align="center">
+		<H4>Copyright © Delta Power Solutions 2018</H4>
+	</div>
+</body>
+</html>

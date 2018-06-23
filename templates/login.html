@@ -3,6 +3,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <title>UPS 能源監控看板</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <style>
 	.block {
 		display: inline-block;
@@ -17,33 +21,38 @@
 </style>
 </head>
 <body background="../static/images/login_background.jpg"></body>
-	<center><H1 >UPS 監控系統登錄畫面</H1></center><br>
-	<div class="left block" align = "center">
-		-------------------------------------------------------------<br>
-		<H3>管理員 的登錄區域</H3><br>
-		<H3>帳號 : <input type='text' name='user_id'></H3><br>
-		<H3>密碼 : <input type='password' name='user_pwd'></H3><br>
-		<div align="center">
-			<button type='button'><b>管理者 登錄</b></button>
-			<button type='button' onclick= "self.location.href = '{{url_for('user_signup')}} '"><b>管理者 註冊</b></button>
-			<button type='button' onclick= "self.location.href = '{{url_for('user_replace')}} '"><b>編輯 管理者 資料</b></button><br><br>
+<div align = "center">
+	<H1 >UPS 監控系統登錄畫面</H1>
+	<font color="red"><H2><b>{{user_error}}</b></H2><br></font>
+</div>
+	
+	<form action="" method="POST" class="left block" align = "center" >
+		<div>
+			-------------------------------------------------------------<br>
+			<H3>管理員 的登錄區域</H3><br>
+			<H3>帳號 : <input type='text' name='user_id'></H3><br>
+			<H3>密碼 : <input type='password' name='user_pwd'></H3><br>
+			<div align="center">
+				<button type='btn'><b>管理者 登錄</b></button>
+				<button type='button'><a href="/user_signup"><b>管理者 註冊</b></a></button><br><br>
+			</div>
+			-------------------------------------------------------------
+			<br><br><br><br><br>
 		</div>
-		-------------------------------------------------------------
-		<br><br><br><br><br>
-	</div>
-	<div class="right block" align = "center">
-		-------------------------------------------------------------<br>
-		<H3>UPS 的登錄區域</H3><br>
-		<H3>UPS ID 編號 : <input type='text' name='ups_id'></H3><br>
-		<H3>擁有者 密碼 : <input type='password' name='ups_id'></H3><br>
-		<div align="center">
-			<button type='button'><b>UPS 編號登錄</b></button>
-			<button type='button' onclick= "self.location.href = '{{url_for('ups_signup')}} '"><b>UPS 編號註冊</b></button>
-			<button type='button' onclick= "self.location.href = '{{url_for('ups_replace')}} '"><b>編輯 UPS 內容</b></button><br><br>
+	</form>
+	<form  class="right block" align = "center">
+		<div>
+			-------------------------------------------------------------<br>
+			<H3>UPS 的登錄區域</H3><br>
+			<H3>UPS ID 編號 : <input type='text' name='ups_id'></H3><br>
+			<H3>擁有者 密碼 : <input type='password' name='ups_id'></H3><br>
+			<div align="center">
+				<button type='btn'><b>UPS 編號登錄</b></button><br><br>
+			</div>
+			-------------------------------------------------------------
+			<br><br><br><br><br>
 		</div>
-		-------------------------------------------------------------
-		<br><br><br><br><br>
-	</div>
+	</form>
 	<div align="center">
 		<H4>Copyright © Delta Power Solutions 2018</H4>
 	</div>

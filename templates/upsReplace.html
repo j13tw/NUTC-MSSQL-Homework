@@ -3,28 +3,34 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <title>UPS 設備內容修改</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <style>
 </style>
 </head>
-<body background="../static/images/login_background.jpg">
+<body background="../static/images/background.png"  align="center">
 <form action="" method="POST" name=all_service>
     <div align="center">
-      <H1>監控系統UPS設備內容修改</H1>
-      ------------------------------------------------------------
-      <font color="red"><H3><b>{{ error }}</b></H3></font>
-      <H3>UPS 編號 : <input type='text' name='ups_id' placeholder="請輸入需修改資料之設備編號"></H3>
-      <H3>管理者 帳號 : <input type='text' name='user_id'></H3>
-      <H3>管理者 密碼 : <input type='password' name='user_pwd'></H3>
-      <H3>管理 IP 更改 : <input type='text' name='ups_ip' placeholder="--需帶IP及PORT號--"></H3>
-      <H3>生產廠區 更改 : <select name="ups_create">
+      <br><H1><b>監控系統UPS設備內容修改</b></H1>
+      <H2><b>--------------------------------------------------------</b></H2>
+      <font color="red"><H2><b>{{ error }}</b></H2></font>
+      <font color="blue"><H2><b>您的 UPS 編號列表 : {{ msg }}</b></H2></font>
+      <H2><b>UPS 編號 : <input type='text' name='ups_id' placeholder="請輸入需修改之設備編號"></b></H2><br>
+      <H2><b>管理者 帳號 : <input type='text' name='user_id' value={{user_id}} disabled></b></H2><br>
+      <H2><b>管理者 密碼 : <input type='password' name='user_pwd'></b></H2><br>
+      <H2><b>設備名稱 更改: <input type='text' name='ups_name'></b></H2><br>
+      <H2><b>管理 IP 更改 : <input type='text' name='ups_ip' placeholder="--需帶IP及PORT號--"></b></H2><br>
+      <H2><b>生產廠區 更改 : <select name="ups_create">
               　<option value="None">-----------請選擇------------</option>
-              　<option value="台北廠">台北廠 (S/N 0001 - 1000)</option>
-              　<option value="新竹廠">新竹廠 (S/N 1001 - 2000)</option>
-              　<option value="苗栗廠">苗栗廠 (S/N 2001 - 3000)</option>
-                <option value="台中廠">台中廠 (S/N 3001 - 4000)</option>
-                <option value="台南廠">台南廠 (S/N 4001 - 5000)</option>
-              </select></H3>
-      <H3>設備系列 更改 : 
+              　<option value="台北分公司">台北分公司</option>
+              　<option value="新竹分公司">新竹分公司</option>
+              　<option value="苗栗分公司">苗栗分公司</option>
+                <option value="台中分公司">台中分公司</option>
+                <option value="台南分公司">台南分公司</option>
+              </select></b></H2><br>
+      <H2><b>設備系列 更改 : 
           <select name="ups_model" size=1 onChange="renew(this.selectedIndex);">
             <option value="None">-----------請選擇------------</option>
             <option value="Agilon_SX">Agilon - SX系列</option>
@@ -36,10 +42,10 @@
             <option value="Modulon_DPH">Modulon - DPH系列</option>
             <option value="Modulon_NH">Modulon - NH系列</option>
             <option value="Modulon_NH+">Modulon - NH-PLUS系列</option>
-          </select></H3>
+          </select></b></H2><br>
       <script>
           department=new Array();
-          department[0]=["請選擇"];	// 設備系列未選擇
+          department[0]=["-----請選擇-----"];	// 設備系列未選擇
           department[1]=["1KVA", "2KVA", "3KVA"];	// Agilon - SX系列
           department[2]=["3KVA", "5KVA", "10KVA"];	// Amplon - 射手座系列
           department[3]=["3KVA", "6KVA", "12KVA"];	 // Amplon - 獅子座系列
@@ -57,17 +63,16 @@
           }
       </script>
       <form name="myForm">
-        <H3>額定容量 更改 : 
+        <H2><b>額定容量 更改 : 
         <select name="ups_unit" size=1>
           <option value="">請選取設備系列
-        </select></H3>
+        </select></H2></b><br>
       </form>
-          <H3>座落位置 更改 : <input type='text' name='ups_locate'placeholder="--設備信息備註欄--"></H3>
-          <input type='checkbox' name='ups_collect'><b>我願意參與台達電能源資料收集</b></input><br><br>
-          <button type="button" onclick= "self.location.href = '{{url_for('login')}} '"><b>回到 UPS 設備登入</b></button>
-          <button type="button" onclick= "self.location.href = '{{url_for('ups_signup')}} '"><b>前往 UPS 設備註冊</b></button>
-          <button class="btn"><b>UPS 設備內容更新</b></button><br><br>
-          ------------------------------------------------------------<br>
+          <H2><b>座落位置 更改 : <input type='text' name='ups_locate'placeholder="--設備信息備註欄--"></b></H2><br>
+          <H2><b><input type='checkbox' name='ups_collect'> 我願意參與台達電能源資料收集</input></b></H2><br>
+          <button type="button" class="btn-secondary btn-lg" onclick="location.href='/now/{{user_id}}'"><b>回到 管理頁面</b></a></button>
+          <button class="btn-success btn-lg"><b>UPS 設備內容更新</b></button>
+          <H2><b>--------------------------------------------------------</b></H2>
           <H4>Copyright © Delta Power Solutions 2018</H4>
     </div>
  </form>
