@@ -20,41 +20,40 @@
 	}
 </style>
 </head>
-<body background="../static/images/login_background.jpg"></body>
+<body style="background-color:rgba(112, 111, 111, 0.52);">
 <div align = "center">
-	<H1 >UPS 監控系統登錄畫面</H1>
+	<br><H1><b>UPS 監控系統登錄畫面</b></H1>
+	<img src="../static/images/login_upper.jpg">
 	<font color="red"><H2><b>{{user_error}}</b></H2><br></font>
 </div>
 	
-	<form action="" method="POST" class="left block" align = "center" >
+	<form action="" method="POST" class="left block" align="center" >
 		<div>
-			-------------------------------------------------------------<br>
-			<H3>管理員 的登錄區域</H3><br>
-			<H3>帳號 : <input type='text' name='user_id'></H3><br>
-			<H3>密碼 : <input type='password' name='user_pwd'></H3><br>
+			<H2>-------------------------------------------------------------</H2><br>
+			<H2><b>管理員 的登錄區域</b></H2><br>
+			<H2><b>帳號 : <input type='text' name='user_id'></b></H2><br>
+			<H2><b>密碼 : <input type='password' name='user_pwd'></b></H2><br>
 			<div align="center">
-				<button type='btn'><b>管理者 登錄</b></button>
-				<button type='button'><a href="/user_signup"><b>管理者 註冊</b></a></button><br><br>
+				<button type='btn' class="btn-success btn-lg"><b>管理者 登錄</b></button>
+				<button type="button" class="btn-secondary btn-lg" onclick="location.href='/user_signup'"><b>管理者 註冊</b></a></button>
 			</div>
-			-------------------------------------------------------------
-			<br><br><br><br><br>
+			<H2>-------------------------------------------------------------</H2>
 		</div>
 	</form>
 	<form  class="right block" align = "center">
 		<div>
-			-------------------------------------------------------------<br>
-			<H3>UPS 的登錄區域</H3><br>
-			<H3>UPS ID 編號 : <input type='text' name='ups_id'></H3><br>
-			<H3>擁有者 密碼 : <input type='password' name='ups_id'></H3><br>
+			<H2>-------------------------------------------------------------</H2><br>
+			<H2><b>UPS 的登錄區域</b></H2><br>
+			<H2><b>UPS ID 編號 : <input type='text' name='ups_id'></b></H2><br>
+			<H2><b>擁有者 密碼 : <input type='password' name='ups_id'></b></H2><br>
 			<div align="center">
-				<button type='btn'><b>UPS 編號登錄</b></button><br><br>
+				<button type='btn' type='btn' class="btn-success btn-lg"><b>UPS 編號登錄</b></button>
 			</div>
-			-------------------------------------------------------------
-			<br><br><br><br><br>
+			<H2>-------------------------------------------------------------</H2>
 		</div>
 	</form>
 	<div align="center">
-		<H4>Copyright © Delta Power Solutions 2018</H4>
+		<br><H4><b>Copyright © Delta Power Solutions 2018</b></H4>
 	</div>
 </body>
 </html>

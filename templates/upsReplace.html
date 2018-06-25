@@ -10,13 +10,13 @@
 <style>
 </style>
 </head>
-<body background="../static/images/background.png"  align="center">
+<body background="../static/images/background_long.png">
 <form action="" method="POST" name=all_service>
     <div align="center">
       <br><H1><b>監控系統UPS設備內容修改</b></H1>
       <H2><b>--------------------------------------------------------</b></H2>
       <font color="red"><H2><b>{{ error }}</b></H2></font>
-      <font color="blue"><H2><b>您的 UPS 編號列表 : {{ msg }}</b></H2></font>
+      <font color="blue"><H2><b>您的 UPS 編號列表 : {{ msg }}</b></H2></font><br>
       <H2><b>UPS 編號 : <input type='text' name='ups_id' placeholder="請輸入需修改之設備編號"></b></H2><br>
       <H2><b>管理者 帳號 : <input type='text' name='user_id' value={{user_id}} disabled></b></H2><br>
       <H2><b>管理者 密碼 : <input type='password' name='user_pwd'></b></H2><br>
