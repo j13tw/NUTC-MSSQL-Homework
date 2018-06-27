@@ -24,7 +24,7 @@
 <div align = "center">
 	<br><H1><b>UPS 監控系統登錄畫面</b></H1>
 	<img src="../static/images/login_upper.jpg">
-	<font color="red"><H2><b>{{user_error}}</b></H2><br></font>
+	<font color="red"><H2><b>{{error}}</b></H2><br></font>
 </div>
 	
 	<form action="" method="POST" class="left block" align="center" >
@@ -40,12 +40,12 @@
 			<H2>-------------------------------------------------------------</H2>
 		</div>
 	</form>
-	<form  class="right block" align = "center">
+	<form action="" method="POST" class="right block" align = "center">
 		<div>
 			<H2>-------------------------------------------------------------</H2><br>
 			<H2><b>UPS 的登錄區域</b></H2><br>
 			<H2><b>UPS ID 編號 : <input type='text' name='ups_id'></b></H2><br>
-			<H2><b>擁有者 密碼 : <input type='password' name='ups_id'></b></H2><br>
+			<H2><b>擁有者 密碼 : <input type='password' name='ups_pwd'></b></H2><br>
 			<div align="center">
 				<button type='btn' type='btn' class="btn-success btn-lg"><b>UPS 編號登錄</b></button>
 			</div>
