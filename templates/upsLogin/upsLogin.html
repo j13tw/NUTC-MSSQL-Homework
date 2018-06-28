@@ -1,0 +1,61 @@
+<!DOCTYPE html>  
+<html>  
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<meta http-equiv="refresh" content="1">
+<title>UPS 監控看板</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+if ("{{hostHealth}}" != "Alive"){
+	document.bgColor="red"
+}
+</script>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="row">
+			<h5 class="col-sm-4" align="center"><b> UPS 設備編號 :  {{ups_id}} 登入</b></h5>
+			<button type='button' class="col-sm-4" onclick="location.href='/history/{{user_id}}'"><h4><b>查詢 UPS 設備歷史資料</b></h4></a></button>
+			<button type='btn' class="col-sm-4"><h4><b>登出</b></h4></a></button>
+		</div>
+	</form>
+	<form action="" method="POST" align = "center" >
+		<div>
+			<br><br>
+			<H3>UPS Server Link : {{hostname}}:{{port}} ({{hostHealth}})</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>UPS 連接位置 : {{serName}} ({{ups_Life}})
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸入線路 : {{inputLine}} 號線路</H3>
+			<H3>輸入頻率 : {{inputFreq}} Hz</H3>
+			<H3>輸入電壓 : {{inputVolt}} V</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>輸出狀態 : {{systemMode}}</H3>
+			<H3>輸出線路 : {{outputLine}} 號線路</H3>
+			<H3>輸出頻率 : {{outputFreq}} Hz</H3>
+			<H3>輸出電壓 : {{outputVolt}} V</H3>
+			<H3>輸出電流 : {{outputAmp}} A</H3>
+			<H3>輸出瓦特 : {{outputWatt}} KW</H3>
+			<H3>輸出負載比 : {{outputPercent}} %</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池健康度 : {{batteryHealth}}</H3>
+			<H3>電池狀態 : {{batteryStatus}}</H3>
+			<H3>充電模式 : {{batteryCharge_Mode}}</H3>
+			<H3>電池電壓 : {{batteryVolt}} V</H3>
+			<H3>電量剩餘百分比 : {{batteryRemain_Percent}} %</H3>
+			<H3>UPS 內部溫度 : {{batteryTemp}} °C</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<H3>電池更換時間 : {{lastBattery}}</H3>
+			<H3>下次更換時間 : {{nextBattery}}</H3>
+			<H3>-------------------------------------------------------------</H3>
+			<br><br>
+		</div>
+	</form>
+	<div align="center">
+		<H4>Copyright © Delta Power Solutions 2018</H4>
+	</div>
+</body>
+</html>
