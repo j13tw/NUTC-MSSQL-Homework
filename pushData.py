@@ -146,7 +146,7 @@ while(True) :
 			nextBattery_Mon_B = nextBattery_B['nextBattery_Mon_B']
 			nextBattery_Day_B = nextBattery_B['nextBattery_Day_B']
 	#####################################################################################################################################
-			conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="QQ123", database="1410432021")
+			conn = pymssql.connect(server="163.17.136.65", user="1410432021", password="H124906356a", database="1410432021")
 			cursor = conn.cursor()
 			print(cursor)
 
