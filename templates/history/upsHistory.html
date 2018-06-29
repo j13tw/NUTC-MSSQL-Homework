@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8"><link rel="icon" href="https://static.jianshukeji.com/highcharts/images/favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            /* css 代码  */
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+        <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+        <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    </head>
+    <body>
+        <div align="center">
+                <br>
+                <font color="red"><H3><b>{{msg}}</b></H3></font>
+        </div>
+        <div id="freq" style="min-width:400px;height:400px"></div>
+        <script>
+                // JS 代码 
+                var chart = Highcharts.chart('freq', {
+                chart: {
+                        type: 'spline'
+                },
+                title: {
+                        text: '輸入輸出頻率匹配'
+                },
+                subtitle: {
+                        text: '設備編號: {{ups_id}} / 設備名稱: {{ups_name}} ({{ups_locate}})'
+                },
+                xAxis: {
+                        categories: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+                },
+                yAxis: {
+                        title: {
+                        text: '頻率'
+                        },
+                        labels: {
+                        formatter: function () {
+                                return this.value + ' HZ';
+                        }
+                        }
+                },
+                tooltip: {
+                        crosshairs: true,
+                        shared: true
+                },
+                plotOptions: {
+                        spline: {
+                                marker: {
+                                        radius: 5,
+                                        lineColor: '#660000',
+                                        lineWidth: 5
+                                }
+                        }
+                },
+                series: [{
+                        name: '輸入頻率',
+                        marker: {
+                        symbol: 'square'
+                        },
+                        data: {{avg_iFreq}}
+                }, {
+                        name: '輸出頻率',
+                        marker: {
+                                symbol: 'diamond'
+                        },
+                        data: {{avg_oFreq}}
+                }]
+                });
+        </script>
+         <div id="volt" style="min-width:400px;height:400px"></div>
+        <script>
+            // JS 代码 
+            var chart = Highcharts.chart('volt', {
+                chart: {
+                        type: 'spline'
+                },
+                title: {
+                        text: '輸入輸出電壓匹配'
+                },
+                subtitle: {
+                        text: '設備編號: {{ups_id}} / 設備名稱: {{ups_name}} ({{ups_locate}})'
+                },
+                xAxis: {
+                        categories: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+                },
+                yAxis: {
+                        title: {
+                        text: '電壓'
+                        },
+                        labels: {
+                        formatter: function () {
+                                return this.value + ' V';
+                        }
+                        }
+                },
+                tooltip: {
+                        crosshairs: true,
+                        shared: true
+                },
+                plotOptions: {
+                        spline: {
+                        marker: {
+                                radius: 5,
+                                lineColor: '#660000',
+                                lineWidth: 5
+                        }
+                        }
+                },
+                series: [{
+                        name: '輸入電壓',
+                        marker: {
+                        symbol: 'square'
+                        },
+                        data: {{avg_iVolt}}
+                }, {
+                        name: '輸出電壓',
+                        marker: {
+                        symbol: 'diamond'
+                        },
+                        data: {{avg_oVolt}}
+                }]
+                });
+        </script>
+         <div id="load" style="min-width:400px;height:400px"></div>
+         <script>
+             // JS 代码 
+             var chart = Highcharts.chart('load', {
+                 chart: {
+                         type: 'spline'
+                 },
+                 title: {
+                         text: '設備輸出負載資訊'
+                 },
+                 subtitle: {
+                         text: '設備編號: {{ups_id}} / 設備名稱: {{ups_name}} ({{ups_locate}})'
+                 },
+                 xAxis: {
+                         categories: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+                 },
+                 yAxis: {
+                         title: {
+                                text: '安培 / 瓩 / 負載比'
+                         },
+                         labels: {
+                                formatter: function () {
+                                        return this.value;
+                                }
+                         }
+                 },
+                 tooltip: {
+                         crosshairs: true,
+                         shared: true
+                 },
+                 plotOptions: {
+                         spline: {
+                         marker: {
+                                 radius: 5,
+                                 lineColor: '#660000',
+                                 lineWidth: 5
+                         }
+                         }
+                 },
+                 series: [{
+                         name: '輸出電流',
+                         marker: {
+                         symbol: 'square'
+                         },
+                         data: {{avg_oAmp}}
+                 }, {
+                         name: '輸出瓦特',
+                         marker: {
+                         symbol: 'diamond'
+                         },
+                         data: {{avg_oWatt}}
+                 }, {
+                         name: '系統負載',
+                         data: {{avg_oLoad}}
+                 }]
+                 });
+         </script>
+         <div id="battery" style="min-width:400px;height:400px"></div>
+         <script>
+             // JS 代码 
+             var chart = Highcharts.chart('battery', {
+                 chart: {
+                         type: 'spline'
+                 },
+                 title: {
+                         text: '設備內部電池資訊'
+                 },
+                 subtitle: {
+                         text: '設備編號: {{ups_id}} / 設備名稱: {{ups_name}} ({{ups_locate}})'
+                 },
+                 xAxis: {
+                         categories: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+                 },
+                 yAxis: {
+                         title: {
+                         text: '°C / 伏特 / 電量比'
+                         },
+                         labels: {
+                         formatter: function () {
+                                 return this.value;
+                         }
+                         }
+                 },
+                 tooltip: {
+                         crosshairs: true,
+                         shared: true
+                 },
+                 plotOptions: {
+                         spline: {
+                         marker: {
+                                 radius: 5,
+                                 lineColor: '#660000',
+                                 lineWidth: 5
+                         }
+                         }
+                 },
+                 series: [{
+                         name: '電池電壓',
+                         marker: {
+                         symbol: 'square'
+                         },
+                         data: {{avg_bVolt}}
+                 }, {
+                         name: '內部溫度',
+                         marker: {
+                         symbol: 'diamond'
+                         },
+                         data: {{avg_bTemp}}
+                 }, {
+                         name: '電池電量比',
+                         data: {{avg_bLevel}}
+                 }]
+                 });
+         </script>
+         <div align="center">
+                <br><br>
+                <button type="button" class="btn-success btn-lg" onclick="location.href='/ups/{{ups_id}}'"><b>回到 管理頁面</b></a></button>
+        </div>
+        <div align="center">
+                <H3>-------------------------------------------------------------</H3>
+                <br>
+		<H4>Copyright © Delta Power Solutions 2018</H4>
+	</div>
+        </body>
+</html>

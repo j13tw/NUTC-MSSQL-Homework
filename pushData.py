@@ -6,6 +6,7 @@ import os, sys
 import socket
 import time
 from decimal import getcontext, Decimal
+from datetime import datetime
 
 ups_Life_A = ''
 serialName_A = ''
@@ -75,7 +76,7 @@ while(True) :
 		result = sock.connect_ex((hostname, int(port)))
 		if result == 0:
 			sock.close()
-			releaseTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			releaseTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 			print ('Data Relaod : ', releaseTime)
 			distance = 'http://' + hostname + ':' + port
 			r = requests.get(distance)
@@ -151,15 +152,15 @@ while(True) :
 			print(cursor)
 
 			tmp = 'INSERT INTO dbo.ups_in (uId, iFreq, iVolt, iLine, iTime) VALUES (' + "'U001' , " + inputFreq_A  + ", " + inputVolt_A + ", " +  inputLine_A + ", '" + str(releaseTime) + "')"
-	#		print(tmp)
+			print(tmp)
 			cursor.execute(tmp)
 			tmp = 'INSERT INTO dbo.ups_in (uId, iFreq, iVolt, iLine, iTime) VALUES (' + "'U002' , " + inputFreq_B  + ", " + inputVolt_B + ", " +  inputLine_B + ", '" + str(releaseTime) + "')"
 	#		print(tmp)
 			cursor.execute(tmp)
-			tmp = 'INSERT INTO dbo.ups_out (uId, oFreq, oVolt, oLine, oTime, oMode, oWatt, oLoad, oAmp) VALUES (' + "'U001' , " + outputFreq_A  + ", " + inputVolt_A + ", " +  inputLine_A + ", '" + str(releaseTime) + "', '" + systemMode_A + "', " + outputWatt_A + ", " + outputPercent_A + ", " + outputAmp_A + ")"
-	#		print(tmp)
+			tmp = 'INSERT INTO dbo.ups_out (uId, oFreq, oVolt, oLine, oTime, oMode, oWatt, oLoad, oAmp) VALUES (' + "'U001' , " + outputFreq_A  + ", " + outputVolt_A + ", " +  inputLine_A + ", '" + str(releaseTime) + "', '" + systemMode_A + "', " + outputWatt_A + ", " + outputPercent_A + ", " + outputAmp_A + ")"
+			print(tmp)
 			cursor.execute(tmp)
-			tmp = 'INSERT INTO dbo.ups_out (uId, oFreq, oVolt, oLine, oTime, oMode, oWatt, oLoad, oAmp) VALUES (' + "'U002' , " + outputFreq_B  + ", " + inputVolt_B + ", " +  inputLine_B + ", '" + str(releaseTime) + "', '" + systemMode_B + "', " + outputWatt_B + ", " + outputPercent_B + ", " + outputAmp_B + ")"
+			tmp = 'INSERT INTO dbo.ups_out (uId, oFreq, oVolt, oLine, oTime, oMode, oWatt, oLoad, oAmp) VALUES (' + "'U002' , " + outputFreq_B  + ", " + outputVolt_B + ", " +  inputLine_B + ", '" + str(releaseTime) + "', '" + systemMode_B + "', " + outputWatt_B + ", " + outputPercent_B + ", " + outputAmp_B + ")"
 	#		print(tmp)
 			cursor.execute(tmp)
 			ChangeDate_A = str(lastBattery_Year_A) + '-' + str(lastBattery_Mon_A) + '-' + str(lastBattery_Day_A)

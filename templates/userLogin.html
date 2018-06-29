@@ -20,7 +20,7 @@ if ("{{hostHealth}}" != "Alive"){
 		<div class="row">
 			<h5 class="col-sm-1" align="center"><b> 歡迎管理者 {{user_id}} 登入</b></h5>
 			<button type='btn' class="col-sm-1"><h4><b>登出</b></h4></a></button>
-			<button type='button' class="col-sm-2" onclick="location.href='/history/{{user_id}}'"><h4><b>查詢 UPS 設備歷史資料</b></h4></a></button>
+			<button type='button' class="col-sm-2" onclick="location.href='/history/{{user_id}}/{{ups_id}}'"><h4><b>查詢 UPS 設備歷史資料</b></h4></a></button>
 			<button type='button' class="col-sm-2" onclick="location.href='/user_replace/{{user_id}}'"><h4><b>編輯 管理者 資料</b></h4></a></button>
 			<button type='button' class="col-sm-2" onclick="location.href='/ups_signup/{{user_id}}'"><h4><b>註冊 UPS 設備資料</b></h4></a></button>
 			<button type='button' class="col-sm-2" onclick="location.href='/ups_replace/{{user_id}}'"><h4><b>編輯 UPS 設備資料</b></h4></a></button>
